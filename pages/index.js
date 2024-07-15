@@ -71,6 +71,13 @@ export default function HomePage() {
     updateResult();
   };
 
+  const multiply = async (num1, num2) => {
+    if (!atm) return;
+    let tx = await atm.multiplyNum(num1, num2);
+    await tx.wait();
+    updateResult();
+  };
+
   const updateResult = async () => {
     if (!atm) return;
     const latestResult = await atm.Result();

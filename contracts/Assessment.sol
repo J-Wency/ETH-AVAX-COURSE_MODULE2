@@ -22,6 +22,10 @@ contract Assessment {
         result = num1 - num2;
     }
 
+    function multiplyNum(int num1, int num2) external {
+        result = num1 * num2;
+    }
+
     function Result() external view returns (int) {
         return result;
     }
