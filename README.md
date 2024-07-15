@@ -1,4 +1,4 @@
-# ETH-AVAX-COURSE_MODULE1
+# ETH-AVAX-COURSE_MODULE2
 This is a repository for the submission requirement for the Metacrafters Etherium + Avalanche PROOF: Intermediate Course.
 
 # Description
