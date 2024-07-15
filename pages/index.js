@@ -1,12 +1,16 @@
 import {useState, useEffect} from "react";
 import {ethers} from "ethers";
+import {Button, TextField} from "@mui/material";
 import atm_abi from "../artifacts/contracts/Assessment.sol/Assessment.json";
 
 export default function HomePage() {
   const [ethWallet, setEthWallet] = useState(undefined);
   const [account, setAccount] = useState(undefined);
   const [atm, setATM] = useState(undefined);
-  const [balance, setBalance] = useState(undefined);
+
+  const [num1, setNum1] = useState(0);
+  const [num2, setNum2] = useState(0);
+  const [result, setResult] = useState("Unavailable");
 
   const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   const atmABI = atm_abi.abi;
@@ -53,27 +57,25 @@ export default function HomePage() {
     setATM(atmContract);
   }
 
-  const getBalance = async() => {
-    if (atm) {
-      setBalance((await atm.getBalance()).toNumber());
-    }
-  }
+  const add = async (num1, num2) => {
+    if (!atm) return;
+    let tx = await atm.addNum(num1, num2);
+    await tx.wait();
+    updateResult();
+  };
 
-  const deposit = async() => {
-    if (atm) {
-      let tx = await atm.deposit(1);
-      await tx.wait()
-      getBalance();
-    }
-  }
+  const subtract = async (num1, num2) => {
+    if (!atm) return;
+    let tx = await atm.subtractNum(num1, num2);
+    await tx.wait();
+    updateResult();
+  };
 
-  const withdraw = async() => {
-    if (atm) {
-      let tx = await atm.withdraw(1);
-      await tx.wait()
-      getBalance();
-    }
-  }
+  const updateResult = async () => {
+    if (!atm) return;
+    const latestResult = await atm.Result();
+    setResult(Number(latestResult));
+  };
 
   const initUser = () => {
     // Check to see if user has Metamask
@@ -86,17 +88,58 @@ export default function HomePage() {
       return <button onClick={connectAccount}>Please connect your Metamask wallet</button>
     }
 
-    if (balance == undefined) {
-      getBalance();
-    }
-
     return (
       <div>
         <p>Your Account: {account}</p>
-        <p>Your Balance: {balance}</p>
-        <button onClick={deposit}>Deposit 1 ETH</button>
-        <button onClick={withdraw}>Withdraw 1 ETH</button>
+        <div className="flex flex-col gap-3 p-3 w-full md:w-1/2">
+          <h3> Latest Result </h3>
+          <h1>
+            {result}
+          </h1>
+          <div className="flex justify-center gap-3">
+            <TextField
+              variant="outlined"
+              type="number"
+              placeholder="Number 1"
+              value={num1}
+              onChange={(event) => setNum1(Number(event.target.value))}
+              className="w-full"
+            />
+            <TextField
+              variant="outlined"
+              type="number"
+              placeholder="Number 2"
+              value={num2}
+              onChange={(event) => setNum2(Number(event.target.value))}
+              className="w-full"
+            />
+          </div>
+          <div className="flex justify-center gap-3">
+            <Button
+              variant="contained"
+              onClick={() => add(num1, num2)}
+              className="w-full"
+            >
+              Add
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => subtract(num1, num2)}
+              className="w-full"
+            >
+              Subtract
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => multiply(num1, num2)}
+              className="w-full"
+            >
+              Multiply
+            </Button>
+          </div>
+        </div>
       </div>
+
     )
   }
 
