@@ -18,7 +18,7 @@ This program is a project requirement for Module 2. It is for the requirement of
 # Troubleshooting Problems
 Occasionally, there would be a trasnaction on your MetaMask that you accept but the React Frontend would not update to show the output on screen. This tends to be a problem with the wallet and smart contract interacting, possibly causing errors on Hardhat due to the bugged transaction number. To resolve this issue, go to your MetaMask wallet select the testing account, select the Hardhat network and go to Settings > Advanced > Clear Activity Tab Data. This will clear possible transaction conflicts, making the program functional. Additionally, this could be resolved by using a different testing account.
 
-#Contact
+# Contact
 J-Wency, wenceslao.joseph.s@gmail.com
 
 # License
